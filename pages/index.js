@@ -82,7 +82,7 @@ function Page({ id, profile, repos, step }) {
         <div className="public-repos">
           <h2>Your public repositories ({repos.length})</h2>
           {!repos.length && <div>
-             <p>No public repositories found</p>
+             <p className='empty'>No public repositories found</p>
             </div>}
           <ul>
             {repos.map((repo, index) => {

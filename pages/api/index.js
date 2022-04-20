@@ -18,6 +18,7 @@ const decryptedData = JSON.parse(decrypted);
 console.log('setting decrypted data', decryptedData);
 everyauth.config(decryptedData);
 
+app.set('views', __dirname + '/views');
 app.engine("pug", require("pug").__express);
 app.set('view engine', 'pug');
 

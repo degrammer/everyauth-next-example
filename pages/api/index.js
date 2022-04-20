@@ -1,5 +1,4 @@
 const everyauth = require('@fusebit/everyauth-express');
-const { Octokit } = require('octokit');
 const crypto = require('crypto');
 const profile = require('./profile');
 

@@ -88,7 +88,7 @@ export async function getServerSideProps(context) {
   const decryptedData = JSON.parse(decrypted);
   everyauth.config(decryptedData);
 
-  const userId = context.params.userId; // req.user.id in production
+  const userId = context.query.userId; // req.user.id in production
 
   // Send a message over slack.
   const userCredentials = await everyauth.getIdentity('githuboauth', userId);

@@ -7,7 +7,25 @@ import { decrypt } from '../utils/encryption';
 import { v4 as uuidv4 } from 'uuid';
 import Cookies from 'cookies';
 
-function Page({ id, profile, repos }) {
+function Page({ id, profile, repos, error }) {
+  if (error) {
+    <>
+        {' '}
+        <title>GitHub public repositories</title>
+        <Script
+          src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"
+          defer
+          crossOrigin="anonymous"
+          integrity="sha512-6PM0qYu5KExuNcKt5bURAoT6KCThUmHRewN3zUFNaoI6Di7XJPTMoT6K0nsagZKk2OB4L7E3q1uQKHNHd4stIQ=="
+        />
+        <div className="alert">
+          <p>
+            <i className="fa-solid fa-bomb"></i>Oops! Something failed {JSON.stringify(error)}
+           
+          </p>
+        </div>
+      </>
+  }
   if (!profile) {
     return (
       <>
@@ -126,13 +144,15 @@ export async function getServerSideProps(context) {
   const decryptedData = JSON.parse(decrypted);
   everyauth.config(decryptedData);
 
-  if (userId) {
+  try {
     const userCredentials = await everyauth.getIdentity('githuboauth', userId);
     const client = new Octokit({ auth: userCredentials?.accessToken });
     const { data: profile } = await client.rest.users.getAuthenticated();
     const { data: repos } = await client.request('GET /user/repos', {});
     // Pass data to the page via props
     return { props: { profile, repos } };
+  } catch (error) {
+    return { props: { error } };
   }
 }
 

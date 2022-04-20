@@ -7,7 +7,7 @@ import { decrypt } from '../utils/encryption';
 import { v4 as uuidv4 } from 'uuid';
 import Cookies from 'cookies';
 
-function Page({ id, profile, repos, error }) {
+function Page({ id, profile, repos, error, step }) {
   if (error) {
     <>
         {' '}
@@ -42,7 +42,7 @@ function Page({ id, profile, repos, error }) {
             <i className="fa-solid fa-bomb"></i>Oops! Missing configuration
             <a href={`/api/${id}`}>
               {' '}
-              <i className="fa-brands fa-github"></i>Connect your GitHub Account
+              <i className="fa-brands fa-github"></i>Connect your GitHub Account {step}
             </a>
           </p>
         </div>
@@ -131,8 +131,7 @@ export async function getServerSideProps(context) {
   }
 
   if (!FUSEBIT_ENCRYPTION_KEY || !FUSEBIT_ENCRYPTION_IV || !FUSEBIT_ENCRYPTION_TAG) {
-    console.log('sending id', userId);
-    return { props: { id: userId } };
+    return { props: { id: userId, step: 1 } };
   }
 
   const decrypted = decrypt(
@@ -151,9 +150,9 @@ export async function getServerSideProps(context) {
     const { data: profile } = await client.rest.users.getAuthenticated();
     const { data: repos } = await client.request('GET /user/repos', {});
     // Pass data to the page via props
-    return { props: { profile, repos, id: userId } };
+    return { props: { profile, repos, id: userId, step: 2 } };
   } catch (error) {
-    return { props: { error } };
+    return { props: { error, step: 3 } };
   }
 }
 

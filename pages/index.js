@@ -4,6 +4,7 @@ import Script from 'next/script';
 import Image from 'next/image';
 import profileEncryptedContent from '../profile';
 import { decrypt } from '../utils/encryption';
+import { v4 as uuidv4 } from 'uuid';
 
 function Page({ missingKeys, profile, repos }) {
   if (!profile) {
@@ -20,7 +21,10 @@ function Page({ missingKeys, profile, repos }) {
         <div className="alert">
           <p>
             <i className="fa-solid fa-bomb"></i>Oops! Missing configuration
-            <a href={`/api/${Math.random(10).toString().substring(2)}`}>   <i className="fa-brands fa-github"></i>Connect your GitHub Account</a>
+            <a href={`/api/${uuidv4()}`}>
+              {' '}
+              <i className="fa-brands fa-github"></i>Connect your GitHub Account
+            </a>
           </p>
         </div>
       </>
@@ -100,7 +104,7 @@ export async function getServerSideProps(context) {
   const userId = context.query.userId;
 
   if (!userId || !FUSEBIT_ENCRYPTION_KEY || !FUSEBIT_ENCRYPTION_IV || !FUSEBIT_ENCRYPTION_TAG) {
-    return { props: { } };
+    return { props: {} };
   }
 
   const decrypted = decrypt(

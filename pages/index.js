@@ -59,24 +59,30 @@ function Page({ id, profile, repos, step }) {
           </div>
           <p className="followers">
             <i className="fa-solid fa-users"></i>
-            <span>{profile.followers}</span>
+            <span>{profile.followers} followers</span>
             <span className="separator">-</span>
-            <span>{profile.following}</span>
+            <span>{profile.following} following</span>
           </p>
-          <section>
-            <i className="fa-solid fa-building"></i>
-            <span>{profile.company}</span>
-          </section>
-          <section>
-            <i className="fa fa-location-dot"></i>
-            <span>{profile.location}</span>
-          </section>
-          <section>
-            <i className="fa-brands fa-twitter"></i>
-            <a href={`https://www.twitter.com/${profile.twitter_username}`} rel="noreferrer" target="_blank">
-              {profile.twitter_username}
-            </a>
-          </section>
+          {profile.company && (
+            <section>
+              <i className="fa-solid fa-building"></i>
+              <span>{profile.company}</span>
+            </section>
+          )}
+          {profile.location && (
+            <section>
+              <i className="fa fa-location-dot"></i>
+              <span>{profile.location}</span>
+            </section>
+          )}
+          {profile.twitter_username && (
+            <section>
+              <i className="fa-brands fa-twitter"></i>
+              <a href={`https://www.twitter.com/${profile.twitter_username}`} rel="noreferrer" target="_blank">
+                {profile.twitter_username}
+              </a>
+            </section>
+          )}
           <section>
             <i className="fa-solid fa-floppy-disk"></i>
             <span>

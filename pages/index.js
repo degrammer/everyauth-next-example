@@ -146,14 +146,16 @@ export async function getServerSideProps(context) {
 
   try {
     const userCredentials = await everyauth.getIdentity('githuboauth', userId);
+    if (!userCredentials.accessToken) {
+      return { props: { error: 'invalid token', step: 4 } };
+    }
     const client = new Octokit({ auth: userCredentials?.accessToken });
     const { data: profile } = await client.rest.users.getAuthenticated();
     const { data: repos } = await client.request('GET /user/repos', {});
     // Pass data to the page via props
     return { props: { profile, repos, id: userId, step: 2 } };
   } catch (error) {
-    throw error;
-    return { props: { error, step: 3 } };
+    return { props: { error: error.data, step: 3 } };
   }
 }
 

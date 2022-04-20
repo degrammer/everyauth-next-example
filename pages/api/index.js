@@ -1,7 +1,22 @@
 const everyauth = require('@fusebit/everyauth-express');
-const { Octokit } = require("octokit");
+const { Octokit } = require('octokit');
+const crypto = require('crypto');
+const profile = require('./profile');
 
 const app = require('express')();
+
+const algorithm = 'aes-128-cbc';
+const decipher = crypto.createDecipheriv(
+  algorithm,
+  process.env.SERVICE_ENCRYPTION_KEY,
+  process.env.SERVICE_ENCRYPTION_IV
+);
+let decrypted = decipher.update(profile, 'base64', 'utf8');
+decrypted += decipher.final('utf8');
+
+const decryptedData = JSON.parse(decrypted);
+console.log('setting decrypted data', decryptedData);
+everyauth.config(decryptedData);
 
 app.set('view engine', 'pug');
 
@@ -14,19 +29,23 @@ app.use(
 );
 
 app.get('/api/finished', async (req, res) => {
-  const userId = 'degrammer'  // req.user.id in production
+  const userId = 'degrammer'; // req.user.id in production
 
   // Send a message over slack.
   const userCredentials = await everyauth.getIdentity('githuboauth', userId);
   const client = new Octokit({ auth: userCredentials?.accessToken });
   const { data } = await client.rest.users.getAuthenticated();
   const { data: repos } = await client.request('GET /user/repos', {});
-  res.render('index',  { title: `GitHub Profile for ${data.login}`, ...data, used_storage: Math.round((data.disk_usage*100)/data.plan.space, 2) , public_repos: repos})
+  res.render('index', {
+    title: `GitHub Profile for ${data.login}`,
+    ...data,
+    used_storage: Math.round((data.disk_usage * 100) / data.plan.space, 2),
+    public_repos: repos,
+  });
 });
 
 app.get('/api', (req, res) => {
   res.redirect('/api/githuboauth');
 });
-
 
 module.exports = app;

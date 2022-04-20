@@ -23,9 +23,4 @@ app.use(
     mapToUserId: (req) => req.params.user, // req.user.id in production
   })
 );
-
-app.get('/api', (req, res) => {
-  res.redirect('/api/demo');
-});
-
 module.exports = app;

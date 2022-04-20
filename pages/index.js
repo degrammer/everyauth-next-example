@@ -39,6 +39,7 @@ function Page({ id, profile, repos, error, step }) {
         />
         <div className="alert">
           <p>
+            Error: {error}
             <i className="fa-solid fa-bomb"></i>Oops! Missing configuration
             <a href={`/api/${id}`}>
               {' '}

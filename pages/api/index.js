@@ -36,12 +36,16 @@ app.get('/api/finished', async (req, res) => {
   const client = new Octokit({ auth: userCredentials?.accessToken });
   const { data } = await client.rest.users.getAuthenticated();
   const { data: repos } = await client.request('GET /user/repos', {});
-  res.render('index', {
+  res.status(200).json({ data, repos});
+  /**
+   *   res.render('index', {
     title: `GitHub Profile for ${data.login}`,
     ...data,
     used_storage: Math.round((data.disk_usage * 100) / data.plan.space, 2),
     public_repos: repos,
   });
+   */
+
 });
 
 app.get('/api', (req, res) => {

@@ -17,10 +17,10 @@ const decryptedData = JSON.parse(decrypted);
 everyauth.config(decryptedData);
 
 app.use(
-  '/api/githuboauth',
+  '/api/githuboauth/:user',
   everyauth.authorize('githuboauth', {
     finishedUrl: '/',
-    mapToUserId: (req) => req.user.id, // req.user.id in production
+    mapToUserId: (req) => req.params.user, // req.user.id in production
   })
 );
 

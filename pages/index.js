@@ -75,7 +75,7 @@ function Page({ profile, repos }) {
 }
 
 // This gets called on every request
-export async function getServerSideProps() {
+export async function getServerSideProps(context) {
   const algorithm = 'aes-128-cbc';
   const decipher = crypto.createDecipheriv(
     algorithm,
@@ -88,7 +88,7 @@ export async function getServerSideProps() {
   const decryptedData = JSON.parse(decrypted);
   everyauth.config(decryptedData);
 
-  const userId = 'degrammer'; // req.user.id in production
+  const userId = context.params.userId; // req.user.id in production
 
   // Send a message over slack.
   const userCredentials = await everyauth.getIdentity('githuboauth', userId);

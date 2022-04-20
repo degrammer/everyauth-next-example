@@ -19,7 +19,7 @@ everyauth.config(decryptedData);
 app.use(
   '/api/githuboauth/:user',
   everyauth.authorize('githuboauth', {
-    finishedUrl: `/${req.params.user}`,
+    finishedUrl: '/',
     mapToUserId: (req) => req.params.user, // req.user.id in production
   })
 );

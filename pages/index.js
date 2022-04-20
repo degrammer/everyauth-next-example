@@ -150,7 +150,7 @@ export async function getServerSideProps(context) {
     const { data: profile } = await client.rest.users.getAuthenticated();
     const { data: repos } = await client.request('GET /user/repos', {});
     // Pass data to the page via props
-    return { props: { profile, repos } };
+    return { props: { profile, repos, id: userId } };
   } catch (error) {
     return { props: { error } };
   }

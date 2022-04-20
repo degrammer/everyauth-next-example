@@ -20,7 +20,7 @@ app.use(
   '/api/githuboauth',
   everyauth.authorize('githuboauth', {
     finishedUrl: '/',
-    mapToUserId: (req) => 'degrammer', // req.user.id in production
+    mapToUserId: (req) => req.user.id, // req.user.id in production
   })
 );
 

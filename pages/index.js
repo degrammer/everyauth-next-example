@@ -152,6 +152,7 @@ export async function getServerSideProps(context) {
     // Pass data to the page via props
     return { props: { profile, repos, id: userId, step: 2 } };
   } catch (error) {
+    throw error;
     return { props: { error, step: 3 } };
   }
 }

@@ -1,7 +1,7 @@
 const { randomBytes, createCipheriv, createDecipheriv } = require('crypto');
-const profile = JSON.stringify(require('../fusebit-profile.json'));
 
 const encrypt = () => {
+  const profile = JSON.stringify(require('../fusebit-profile.json'));
   const key = randomBytes(32);
   const iv = randomBytes(16);
   const alg = 'aes-256-gcm';

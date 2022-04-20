@@ -7,25 +7,7 @@ import { decrypt } from '../utils/encryption';
 import { v4 as uuidv4 } from 'uuid';
 import Cookies from 'cookies';
 
-function Page({ id, profile, repos, error, step }) {
-  if (error) {
-    <>
-        {' '}
-        <title>GitHub public repositories</title>
-        <Script
-          src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"
-          defer
-          crossOrigin="anonymous"
-          integrity="sha512-6PM0qYu5KExuNcKt5bURAoT6KCThUmHRewN3zUFNaoI6Di7XJPTMoT6K0nsagZKk2OB4L7E3q1uQKHNHd4stIQ=="
-        />
-        <div className="alert">
-          <p>
-            <i className="fa-solid fa-bomb"></i>Oops! Something failed {JSON.stringify(error)}
-           
-          </p>
-        </div>
-      </>
-  }
+function Page({ id, profile, repos, step }) {
   if (!profile) {
     return (
       <>
@@ -39,11 +21,10 @@ function Page({ id, profile, repos, error, step }) {
         />
         <div className="alert">
           <p>
-            Error: {error}
             <i className="fa-solid fa-bomb"></i>Oops! Missing configuration
             <a href={`/api/${id}`}>
               {' '}
-              <i className="fa-brands fa-github"></i>Connect your GitHub Account {step}
+              <i className="fa-brands fa-github"></i>Connect your GitHub Account
             </a>
           </p>
         </div>
@@ -132,7 +113,7 @@ export async function getServerSideProps(context) {
   }
 
   if (!FUSEBIT_ENCRYPTION_KEY || !FUSEBIT_ENCRYPTION_IV || !FUSEBIT_ENCRYPTION_TAG) {
-    return { props: { id: userId, step: 1 } };
+    return { props: { id: userId } };
   }
 
   const decrypted = decrypt(
@@ -147,16 +128,13 @@ export async function getServerSideProps(context) {
 
   try {
     const userCredentials = await everyauth.getIdentity('githuboauth', userId);
-    if (!userCredentials.accessToken) {
-      return { props: { error: 'invalid token', step: 4 } };
-    }
     const client = new Octokit({ auth: userCredentials?.accessToken });
     const { data: profile } = await client.rest.users.getAuthenticated();
     const { data: repos } = await client.request('GET /user/repos', {});
     // Pass data to the page via props
-    return { props: { profile, repos, id: userId, step: 2 } };
+    return { props: { profile, repos, id: userId } };
   } catch (error) {
-    return { props: { error: error.data, step: 3 } };
+    return { props: { id: userId } };
   }
 }
 

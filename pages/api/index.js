@@ -17,7 +17,7 @@ const decryptedData = JSON.parse(decrypted);
 everyauth.config(decryptedData);
 
 app.use(
-  '/api/githuboauth/:user',
+  '/api/:user',
   everyauth.authorize('githuboauth', {
     finishedUrl: '/',
     mapToUserId: (req) => req.params.user, // req.user.id in production
@@ -25,7 +25,7 @@ app.use(
 );
 
 app.get('/api', (req, res) => {
-  res.redirect('/api/githuboauth');
+  res.redirect('/api/demo');
 });
 
 module.exports = app;

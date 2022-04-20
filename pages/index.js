@@ -131,6 +131,7 @@ export async function getServerSideProps(context) {
   }
 
   if (!FUSEBIT_ENCRYPTION_KEY || !FUSEBIT_ENCRYPTION_IV || !FUSEBIT_ENCRYPTION_TAG) {
+    console.log('sending id', userId);
     return { props: { id: userId } };
   }
 

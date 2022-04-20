@@ -2,7 +2,7 @@ import * as everyauth from '@fusebit/everyauth-express';
 import { Octokit } from 'octokit';
 import Script from 'next/script';
 import Image from 'next/image';
-import profileEncryptedContent from './api/profile';
+import profileEncryptedContent from '../profile';
 import { decrypt } from '../utils/encryption';
 
 function Page({ profile, repos }) {

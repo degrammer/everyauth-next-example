@@ -1,17 +1,21 @@
 const everyauth = require('@fusebit/everyauth-express');
-const crypto = require('crypto');
-const profile = require('./profile');
+import profileEncryptedContent from '../profile';
+import { decrypt } from '../utils/encryption';
 
 const app = require('express')();
 
-const algorithm = 'aes-128-cbc';
-const decipher = crypto.createDecipheriv(
-  algorithm,
-  process.env.SERVICE_ENCRYPTION_KEY,
-  process.env.SERVICE_ENCRYPTION_IV
+
+const { FUSEBIT_ENCRYPTION_KEY, FUSEBIT_ENCRYPTION_IV, FUSEBIT_ENCRYPTION_TAG} = process.env;
+if (!FUSEBIT_ENCRYPTION_KEY || !FUSEBIT_ENCRYPTION_IV || !FUSEBIT_ENCRYPTION_TAG) {
+  throw new Error('Missing required encryption configuration');
+}
+
+const decrypted = decrypt(
+  FUSEBIT_ENCRYPTION_KEY,
+  FUSEBIT_ENCRYPTION_IV,
+  FUSEBIT_ENCRYPTION_TAG,
+  profileEncryptedContent
 );
-let decrypted = decipher.update(profile, 'base64', 'utf8');
-decrypted += decipher.final('utf8');
 
 const decryptedData = JSON.parse(decrypted);
 everyauth.config(decryptedData);

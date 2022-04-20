@@ -5,7 +5,7 @@ const path = require('path');
 
 const saveEncryptedProfileToDisk = (content) => {
     fs.writeFileSync(
-        path.join(__dirname, '..', 'pages/api', 'profile.js'),
+        path.join(__dirname, '..', 'profile.js'),
         `module.exports = '${content}'`
       );
 };

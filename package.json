@@ -4,7 +4,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "everyauth:configure": "fuse profile get default --includeCredentials -o json > fusebit-profile.json && node ops/configure"
   },
   "dependencies": {
     "@fusebit/everyauth-express": "^1.0.4",

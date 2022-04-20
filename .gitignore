@@ -34,4 +34,6 @@ yarn-error.log*
 # vercel
 .vercel
 
+# fusebit
 .fusebit
+fusebit-profile.json

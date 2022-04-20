@@ -2,8 +2,8 @@ import * as everyauth from '@fusebit/everyauth-express';
 import { Octokit } from 'octokit';
 import Script from 'next/script';
 import Image from 'next/image';
-import crypto from 'crypto';
-import profileFile from './api/profile';
+import profileEncryptedContent from './api/profile';
+import { decrypt } from '../utils/encryption';
 
 function Page({ profile, repos }) {
   return (
@@ -76,15 +76,12 @@ function Page({ profile, repos }) {
 
 // This gets called on every request
 export async function getServerSideProps(context) {
-  const algorithm = 'aes-128-cbc';
-  const decipher = crypto.createDecipheriv(
-    algorithm,
-    process.env.SERVICE_ENCRYPTION_KEY,
-    process.env.SERVICE_ENCRYPTION_IV
+  const decrypted = decrypt(
+    process.env.FUSEBIT_ENCRYPTION_KEY,
+    process.env.FUSEBIT_ENCRYPTION_IV,
+    process.env.FUSEBIT_ENCRYPTION_TAG,
+    profileEncryptedContent
   );
-  let decrypted = decipher.update(profileFile, 'base64', 'utf8');
-  decrypted += decipher.final('utf8');
-
   const decryptedData = JSON.parse(decrypted);
   everyauth.config(decryptedData);
 

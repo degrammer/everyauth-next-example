@@ -109,7 +109,6 @@ export async function getServerSideProps(context) {
     userId = uuidv4();
     cookies.set('user-id', userId, {
       httpOnly: true,
-      secure: true
     });
   }
 

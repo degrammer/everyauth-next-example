@@ -1,17 +1,18 @@
-const everyauth = require('@fusebit/everyauth-express');
-const { Octokit } = require('octokit');
+import * as everyauth from '@fusebit/everyauth-express';
+import { Octokit } from 'octokit';
 import Script from 'next/script'
+import Image from 'next/image'
 
 function Page({ profile, repos }) {
    return (<>
-   <title>{profile.login}'s public repositories</title>
+   <title>{profile.login}&#39;s public repositories</title>
     <Script src='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js' defer crossOrigin='anonymous' integrity='sha512-6PM0qYu5KExuNcKt5bURAoT6KCThUmHRewN3zUFNaoI6Di7XJPTMoT6K0nsagZKk2OB4L7E3q1uQKHNHd4stIQ==' />
     <div className='container'>
         <div className='profile'>
             <div className='top'>
-                <img src={profile.avatar_url} alt='GitHub Avatar' />
+                <Image className='pic' height={400} width={400} src={profile.avatar_url} alt='GitHub Avatar' />
                 <h2>{profile.name}</h2>
-                <a href={profile.html_url}>{profile.login}</a>
+                <a href={profile.html_url} rel='noreferrer'>{profile.login}</a>
                 <p>{profile.bio}</p>
             </div>
             <p className='followers'>
@@ -30,7 +31,7 @@ function Page({ profile, repos }) {
             </section>
             <section>
               <i className='fa-brands fa-twitter'></i>
-              <a href={`https://www.twitter.com/${profile.twitter_username}`} target='_blank'>{profile.twitter_username}</a>
+              <a href={`https://www.twitter.com/${profile.twitter_username}`} rel='noreferrer'  target='_blank'>{profile.twitter_username}</a>
             </section>
             <section>
               <i className='fa-solid fa-floppy-disk'></i>
@@ -43,7 +44,7 @@ function Page({ profile, repos }) {
          {
             repos.map((repo, index) => {
               return  <li key={index}>
-                <a href={repo.html_url} target='_blank' title={repo.description}>repo.full_name</a>
+                <a href={repo.html_url} target='_blank' rel='noreferrer'  title={repo.description}>{repo.full_name}</a>
                 <span>{repo.description}</span>
                 { repo.language && <span className='lang'>repo.language</span>}
                 </li>

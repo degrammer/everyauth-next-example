@@ -28,7 +28,7 @@ body, a {
     text-align: center;
 }
 
-.profile img {
+.profile .pic {
     height: 400px;
     width: 400px;
     border-radius: 50%;

@@ -5,8 +5,9 @@ import Image from 'next/image';
 import profileEncryptedContent from '../profile';
 import { decrypt } from '../utils/encryption';
 import { v4 as uuidv4 } from 'uuid';
+import Cookies from 'cookies';
 
-function Page({ missingKeys, profile, repos }) {
+function Page({ id, profile, repos }) {
   if (!profile) {
     return (
       <>
@@ -21,7 +22,7 @@ function Page({ missingKeys, profile, repos }) {
         <div className="alert">
           <p>
             <i className="fa-solid fa-bomb"></i>Oops! Missing configuration
-            <a href={`/api/${uuidv4()}`}>
+            <a href={`/api/${id}`}>
               {' '}
               <i className="fa-brands fa-github"></i>Connect your GitHub Account
             </a>
@@ -100,11 +101,20 @@ function Page({ missingKeys, profile, repos }) {
 
 // This gets called on every request
 export async function getServerSideProps(context) {
+  const cookies = new Cookies(context.req, context.res);
   const { FUSEBIT_ENCRYPTION_KEY, FUSEBIT_ENCRYPTION_IV, FUSEBIT_ENCRYPTION_TAG } = process.env;
-  const userId = context.query.userId;
+  let userId = context.query.userId || cookies.get('user-id');
 
-  if (!userId || !FUSEBIT_ENCRYPTION_KEY || !FUSEBIT_ENCRYPTION_IV || !FUSEBIT_ENCRYPTION_TAG) {
-    return { props: {} };
+  if (!userId) {
+    userId = uuidv4();
+    cookies.set('user-id', userId, {
+      httpOnly: true,
+      secure: true
+    });
+  }
+
+  if (!FUSEBIT_ENCRYPTION_KEY || !FUSEBIT_ENCRYPTION_IV || !FUSEBIT_ENCRYPTION_TAG) {
+    return { props: { userId } };
   }
 
   const decrypted = decrypt(

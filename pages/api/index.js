@@ -1,5 +1,5 @@
 const everyauth = require('@fusebit/everyauth-express');
-import profileEncryptedContent from '../profile';
+import profileEncryptedContent from '../../profile';
 import { decrypt } from '../utils/encryption';
 
 const app = require('express')();

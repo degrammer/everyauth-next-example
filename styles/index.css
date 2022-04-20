@@ -96,23 +96,39 @@ section svg, .followers svg {
 
 
 .alert {
-    background-color: #ffeb3b;
-    color: #e91e63;
+    color: gray;
     padding: 10px;
     text-align: center;
-    margin: 50vh auto;
+    margin: 10vh auto;
     width: 50%;
-    border: dashed 1px #e91e63;
     font-size: 20px;
 }
 
 .alert a {
-    color: #9c27b0;
-    padding: 10px;
-
+    color: gray;
 }
 
-.alert a svg {
-    padding-right: 2px;
+.button {
+    display: inline-block;
+    background-color: #21262d;
+    border-radius: 50px;
+    color: #fff!important;
+    box-shadow: 2px 2px 2px 2px #44444469;
+    padding: 20px;
+    margin: 10px;
+}
+
+.button svg {
+    padding-right: 5px;
+}
+
+.button:hover {
+    background-color:#474a4c!important;
+    color: #fff;
+    border: solid 1px #fff;
+}
+
+.alert h1 {
+    margin: 20px;
 }
 

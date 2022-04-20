@@ -76,12 +76,18 @@ function Page({ profile, repos }) {
 
 // This gets called on every request
 export async function getServerSideProps(context) {
+  const { FUSEBIT_ENCRYPTION_KEY, FUSEBIT_ENCRYPTION_IV, FUSEBIT_ENCRYPTION_TAG} = process.env;
+  if (!FUSEBIT_ENCRYPTION_KEY || !FUSEBIT_ENCRYPTION_IV || !FUSEBIT_ENCRYPTION_TAG) {
+    throw new Error('Missing required encryption configuration');
+  }
+
   const decrypted = decrypt(
-    process.env.FUSEBIT_ENCRYPTION_KEY,
-    process.env.FUSEBIT_ENCRYPTION_IV,
-    process.env.FUSEBIT_ENCRYPTION_TAG,
+    FUSEBIT_ENCRYPTION_KEY,
+    FUSEBIT_ENCRYPTION_IV,
+    FUSEBIT_ENCRYPTION_TAG,
     profileEncryptedContent
   );
+
   const decryptedData = JSON.parse(decrypted);
   everyauth.config(decryptedData);
 

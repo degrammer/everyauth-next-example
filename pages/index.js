@@ -5,7 +5,27 @@ import Image from 'next/image';
 import profileEncryptedContent from '../profile';
 import { decrypt } from '../utils/encryption';
 
-function Page({ profile, repos }) {
+function Page({ missingKeys, profile, repos }) {
+  if (missingKeys) {
+    return (
+      <>
+        {' '}
+        <title>public repositories</title>
+        <Script
+          src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"
+          defer
+          crossOrigin="anonymous"
+          integrity="sha512-6PM0qYu5KExuNcKt5bURAoT6KCThUmHRewN3zUFNaoI6Di7XJPTMoT6K0nsagZKk2OB4L7E3q1uQKHNHd4stIQ=="
+        />
+        <div className="alert">
+          <p>
+            <i className="fa-solid fa-bomb"></i>Oops! Missing configuration
+            <a href={`/api/${Math.random(10).toString().substring(2)}`}>   <i className="fa-brands fa-github"></i>Connect your GitHub Account</a>
+          </p>
+        </div>
+      </>
+    );
+  }
   return (
     <>
       <title>{profile.login}&#39;s public repositories</title>
@@ -76,9 +96,9 @@ function Page({ profile, repos }) {
 
 // This gets called on every request
 export async function getServerSideProps(context) {
-  const { FUSEBIT_ENCRYPTION_KEY, FUSEBIT_ENCRYPTION_IV, FUSEBIT_ENCRYPTION_TAG} = process.env;
+  const { FUSEBIT_ENCRYPTION_KEY, FUSEBIT_ENCRYPTION_IV, FUSEBIT_ENCRYPTION_TAG } = process.env;
   if (!FUSEBIT_ENCRYPTION_KEY || !FUSEBIT_ENCRYPTION_IV || !FUSEBIT_ENCRYPTION_TAG) {
-    throw new Error('Missing required encryption configuration');
+    return { props: { missingKeys: true } };
   }
 
   const decrypted = decrypt(
@@ -91,15 +111,16 @@ export async function getServerSideProps(context) {
   const decryptedData = JSON.parse(decrypted);
   everyauth.config(decryptedData);
 
-  const userId = context.query.userId; // req.user.id in production
+  const userId = context.query.userId;
 
-  // Send a message over slack.
-  const userCredentials = await everyauth.getIdentity('githuboauth', userId);
-  const client = new Octokit({ auth: userCredentials?.accessToken });
-  const { data: profile } = await client.rest.users.getAuthenticated();
-  const { data: repos } = await client.request('GET /user/repos', {});
-  // Pass data to the page via props
-  return { props: { profile, repos } };
+  if (userId) {
+    const userCredentials = await everyauth.getIdentity('githuboauth', userId);
+    const client = new Octokit({ auth: userCredentials?.accessToken });
+    const { data: profile } = await client.rest.users.getAuthenticated();
+    const { data: repos } = await client.request('GET /user/repos', {});
+    // Pass data to the page via props
+    return { props: { profile, repos } };
+  }
 }
 
 export default Page;

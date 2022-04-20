@@ -94,3 +94,25 @@ section svg, .followers svg {
     line-height: 1.25;
 }
 
+
+.alert {
+    background-color: #ffeb3b;
+    color: #e91e63;
+    padding: 10px;
+    text-align: center;
+    margin: 50vh auto;
+    width: 50%;
+    border: dashed 1px #e91e63;
+    font-size: 20px;
+}
+
+.alert a {
+    color: #9c27b0;
+    padding: 10px;
+
+}
+
+.alert a svg {
+    padding-right: 2px;
+}
+

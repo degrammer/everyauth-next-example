@@ -4,13 +4,15 @@ import Script from 'next/script'
 
 function Page({ profile, repos }) {
    return (<>
+   <title>{profile.login}'s public repositories</title>
     <Script src='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js' defer crossOrigin='anonymous' integrity='sha512-6PM0qYu5KExuNcKt5bURAoT6KCThUmHRewN3zUFNaoI6Di7XJPTMoT6K0nsagZKk2OB4L7E3q1uQKHNHd4stIQ==' />
     <div className='container'>
         <div className='profile'>
             <div className='top'>
-                <img src={profile.avatar_url} />
+                <img src={profile.avatar_url} alt='GitHub Avatar' />
                 <h2>{profile.name}</h2>
                 <a href={profile.html_url}>{profile.login}</a>
+                <p>{profile.bio}</p>
             </div>
             <p className='followers'>
               <i className='fa-solid fa-users'></i>
@@ -28,7 +30,7 @@ function Page({ profile, repos }) {
             </section>
             <section>
               <i className='fa-brands fa-twitter'></i>
-              <span>{profile.twitter_username}</span>
+              <a href={`https://www.twitter.com/${profile.twitter_username}`} target='_blank'>{profile.twitter_username}</a>
             </section>
             <section>
               <i className='fa-solid fa-floppy-disk'></i>

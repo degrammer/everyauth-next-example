@@ -20,7 +20,7 @@ function Page({ id, profile, repos, step }) {
           integrity="sha512-6PM0qYu5KExuNcKt5bURAoT6KCThUmHRewN3zUFNaoI6Di7XJPTMoT6K0nsagZKk2OB4L7E3q1uQKHNHd4stIQ=="
         />
         <div className="alert">
-          <h1>Welcome to <a href='https://github.com/fusebit/everyauth-express'>EveryAuth</a> Demo</h1>
+          <h1>Welcome to <a target='_blank' rel='noreferrer' href='https://github.com/fusebit/everyauth-express'>EveryAuth</a> Demo</h1>
           <span>Connect your GitHub Account to display your profile and public repositories information</span>
           <p>
             <a className='button' href={`/api/${id}`}>

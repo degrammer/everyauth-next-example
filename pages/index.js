@@ -97,7 +97,9 @@ function Page({ missingKeys, profile, repos }) {
 // This gets called on every request
 export async function getServerSideProps(context) {
   const { FUSEBIT_ENCRYPTION_KEY, FUSEBIT_ENCRYPTION_IV, FUSEBIT_ENCRYPTION_TAG } = process.env;
-  if (!FUSEBIT_ENCRYPTION_KEY || !FUSEBIT_ENCRYPTION_IV || !FUSEBIT_ENCRYPTION_TAG) {
+  const userId = context.query.userId;
+
+  if (!userId || !FUSEBIT_ENCRYPTION_KEY || !FUSEBIT_ENCRYPTION_IV || !FUSEBIT_ENCRYPTION_TAG) {
     return { props: { } };
   }
 
@@ -110,8 +112,6 @@ export async function getServerSideProps(context) {
 
   const decryptedData = JSON.parse(decrypted);
   everyauth.config(decryptedData);
-
-  const userId = context.query.userId;
 
   if (userId) {
     const userCredentials = await everyauth.getIdentity('githuboauth', userId);

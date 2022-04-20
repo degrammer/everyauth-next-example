@@ -20,10 +20,16 @@ function Page({ id, profile, repos, step }) {
           integrity="sha512-6PM0qYu5KExuNcKt5bURAoT6KCThUmHRewN3zUFNaoI6Di7XJPTMoT6K0nsagZKk2OB4L7E3q1uQKHNHd4stIQ=="
         />
         <div className="alert">
-          <h1>Welcome to <a target='_blank' rel='noreferrer' href='https://github.com/fusebit/everyauth-express'>EveryAuth</a> Demo</h1>
+          <h1>
+            Welcome to{' '}
+            <a target="_blank" rel="noreferrer" href="https://github.com/fusebit/everyauth-express">
+              EveryAuth
+            </a>{' '}
+            Demo
+          </h1>
           <span>Connect your GitHub Account to display your profile and public repositories information</span>
           <p>
-            <a className='button' href={`/api/${id}`}>
+            <a className="button" href={`/api/${id}`}>
               {' '}
               <i className="fa-brands fa-github"></i>Connect your GitHub Account
             </a>
@@ -81,9 +87,11 @@ function Page({ id, profile, repos, step }) {
         </div>
         <div className="public-repos">
           <h2>Your public repositories ({repos.length})</h2>
-          {!repos.length && <div>
-             <p className='empty'>No public repositories found</p>
-            </div>}
+          {!repos.length && (
+            <div>
+              <p className="empty">No public repositories found</p>
+            </div>
+          )}
           <ul>
             {repos.map((repo, index) => {
               return (
@@ -92,7 +100,7 @@ function Page({ id, profile, repos, step }) {
                     {repo.full_name}
                   </a>
                   <span>{repo.description}</span>
-                  {repo.language && <span className="lang">repo.language</span>}
+                  {repo.language && <span className="lang">{repo.language}</span>}
                 </li>
               );
             })}

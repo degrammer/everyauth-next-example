@@ -6,11 +6,11 @@ import profileEncryptedContent from '../profile';
 import { decrypt } from '../utils/encryption';
 
 function Page({ missingKeys, profile, repos }) {
-  if (missingKeys) {
+  if (!profile) {
     return (
       <>
         {' '}
-        <title>public repositories</title>
+        <title>GitHub public repositories</title>
         <Script
           src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/js/all.min.js"
           defer
@@ -98,7 +98,7 @@ function Page({ missingKeys, profile, repos }) {
 export async function getServerSideProps(context) {
   const { FUSEBIT_ENCRYPTION_KEY, FUSEBIT_ENCRYPTION_IV, FUSEBIT_ENCRYPTION_TAG } = process.env;
   if (!FUSEBIT_ENCRYPTION_KEY || !FUSEBIT_ENCRYPTION_IV || !FUSEBIT_ENCRYPTION_TAG) {
-    return { props: { missingKeys: true } };
+    return { props: { } };
   }
 
   const decrypted = decrypt(

@@ -119,7 +119,6 @@ function Page({ id, profile, repos, step }) {
 
 // This gets called on every request
 export async function getServerSideProps(context) {
-  context.res.setHeader('Cache-Control', 's-max-age=1, stale-while-revalidate');
   const cookies = new Cookies(context.req, context.res);
   const { FUSEBIT_ENCRYPTION_KEY, FUSEBIT_ENCRYPTION_IV, FUSEBIT_ENCRYPTION_TAG } = process.env;
   let userId = context.query.userId || cookies.get('user-id');

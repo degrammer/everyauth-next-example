@@ -4,6 +4,9 @@ const nextConfig = {
   images: {
     domains: ['avatars.githubusercontent.com'],
   },
+  headers: {
+    'cache-control': 's-max-age=1, stale-while-revalidate'
+  }
 }
 
 module.exports = nextConfig
